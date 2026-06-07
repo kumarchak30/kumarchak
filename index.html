@@ -88,17 +88,6 @@
         <h2 class="section-title">A bit about <span class="grad-text">myself</span></h2>
       </div>
       <div class="about-grid reveal">
-        <div class="about-avatar glass-card">
-          <div class="avatar-circle">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          </div>
-          <p class="avatar-hint">Replace with your photo</p>
-          <div class="about-badges">
-            <span class="badge">🐊 Go Gators</span>
-            <span class="badge">Class of 2029</span>
-            <span class="badge">Open to Internships</span>
-          </div>
-        </div>
         <div class="about-text glass-card">
           <p>Hey! I'm Kumar — a first-year <strong>Computer Engineering</strong> student at the <strong>University of Florida</strong>. I love the intersection of hardware and software: building things that bridge real-world sensors with intelligent software.</p>
           <p>Outside class I handle <strong>data acquisition</strong> for the Swamp Launch Rocket Team, serve as <strong>Technical Affairs Director</strong> for FLEG, and hold a <strong>CompTIA IT Fundamentals Pro</strong> certification. I also interned as a software developer before starting at UF, so I know what shipping real code looks like.</p>
@@ -334,9 +323,22 @@
       </div>
       <div class="blog-grid reveal">
 
-        <article class="blog-card glass-card">
+        <article class="blog-card glass-card" data-title="First Semester CE at UF: What I Wish I Knew" data-date="May, 2026" data-tag="Reflection" data-full="I'm writing this after finishing my first year, while taking summer classes, as a Computer Engineering major at UF with a 3.5+ GPA. Here's the unfiltered version of how it went.&#10;&#10;
+        The coursework was heavier than I expected — not in terms of raw difficulty, but in terms of how many separate things you have to keep in your head at once. Digital Logic, Programming Fundamentals 1, Calculus, and Physics all running in parallel means you're constantly context-switching. Time-blocking specific subjects to specific days helped more than anything else.&#10;&#10;
+        Digital Logic (EEL3701C) was the most interesting and the most intensive class I've ever taken. Going from truth tables to combinational circuits to sequential logic felt like learning a new language for thinking about computation. The lab component — actually wiring up circuits and seeing them fail in unexpected ways — was invaluable. Going into the class had its buzz surrounding the renowned Dr. Schwartz and my experience was well fitting of what I was told by my seniors. The labs for this class genuinly took somewhere between 15-20 hours per lab and while it was exhausting (RIP my sleep schedule), I got to learn so much about FPGA development as well as elementary CPU designs which I have a good hunch I'd like to pursue in the following semesters.&#10;&#10;
+        Joining the Swamp Launch Rocket Team in the same semester was probably overambitious. But it forced me to apply what I was learning in class to real hardware, which made everything stick better. Our team ended up redesigning PCB connections for the data acquisition unit, which I would not have been able to do without the Digital Logic foundation.&#10;&#10;What I wish I knew going in: office hours are not a sign of weakness. Every professor I visited was genuinely helpful, and several of them remembered me by name by the end of the semester. The students who struggle in silence are the ones who fall behind — don't be that person.">
           <div class="blog-meta">
-            <span class="blog-date">Apr 15, 2026</span>
+            <span class="blog-date">May, 2026</span>
+            <span class="blog-tag-pill">Reflection</span>
+          </div>
+          <h3 class="blog-title">First Year CE at UF: What I Wish I Knew</h3>
+          <p class="blog-excerpt">Digital Logic, Programming Fundamentals, and a rocket team all in semester one. Here's the honest breakdown of what worked, what didn't, and what surprised me most...</p>
+          <a href="#" class="blog-more">Read More &rarr;</a>
+        </article>
+
+        <article class="blog-card glass-card" data-title="Building a Driver Monitoring System on a Budget" data-date="April, 2026" data-tag="Embedded" data-full="Driver fatigue is responsible for roughly 20% of serious road accidents — and commercial solutions cost hundreds of dollars. I wanted to see how close I could get with commodity hardware.&#10;&#10;The core idea is straightforward: use a webcam to capture the driver's face, run MediaPipe's face mesh model to get 468 3D landmarks, and compute the Eye Aspect Ratio (EAR) in real time. When both eyes stay below an EAR threshold for more than ~5 seconds, the system triggers an alert via an Arduino-controlled buzzer and LED.&#10;&#10;The Arduino communicates over USB serial (PySerial). Python sends a one-byte command — 0x01 for alert, 0x00 for clear — and the Arduino handles the physical output. This keeps the compute on the laptop and the actuation on cheap hardware.&#10;&#10;The biggest challenge was false positives. Blinking naturally drops the EAR below threshold, so I had to tune the frame-count window carefully. I also added head-pose estimation using the 3D landmarks to catch distraction events (eyes forward but head turned away).&#10;&#10;The current rework moves everything onto a standalone microprocessor — no laptop in the loop. The plan is to run a quantized face-detection model on an edge MCU, with the alert logic running in bare-metal C. Still in progress, but the prototype works reliably in my car.">
+          <div class="blog-meta">
+            <span class="blog-date">April, 2026</span>
             <span class="blog-tag-pill">Embedded</span>
           </div>
           <h3 class="blog-title">Building a Driver Monitoring System on a Budget</h3>
@@ -344,23 +346,13 @@
           <a href="#" class="blog-more">Read More &rarr;</a>
         </article>
 
-        <article class="blog-card glass-card">
+        <article class="blog-card glass-card" data-title="OOP in C++: What Building Minesweeper Taught Me" data-date="December, 2025" data-tag="Software" data-full="Before this project, my understanding of OOP was mostly theoretical — classes, inheritance, polymorphism - with some barebones experience in Python making Sudoku (COP3502). Building Minesweeper end-to-end in C++ with SFML forced me to make real design decisions, and a lot of them turned out to be wrong the first time.&#10;&#10;The biggest lesson was ownership. C++ doesn't manage memory for you, and when I had a Board object, a Tile object, and a TextureManager all referencing each other, I quickly ran into dangling pointers and double-frees. Switching to RAII — wrapping every resource in an object whose destructor handles cleanup — fixed the leaks and made the code dramatically easier to reason about.&#10;&#10;The recursive reveal algorithm (uncovering all adjacent empty tiles when you click a blank square) was the most satisfying piece. My first version used a naive DFS that blew the stack on large boards. Moving to an explicit stack with a visited set fixed it.&#10;&#10;I also learned that modularity isn't just about splitting code into files. It's about defining clear interfaces so that the game logic doesn't know or care how the board is rendered. When I swapped out my initial rendering approach mid-project, only one file needed to change.&#10;&#10;If you're a CE or CS student who hasn't done a non-trivial C++ project yet — I'd genuinely recommend a game. The tight feedback loop (you can see if something is broken immediately) makes it a great environment for learning systems programming fundamentals.">
           <div class="blog-meta">
-            <span class="blog-date">Feb 10, 2026</span>
+            <span class="blog-date">December, 2026</span>
             <span class="blog-tag-pill">Software</span>
           </div>
           <h3 class="blog-title">OOP in C++: What Building Minesweeper Taught Me</h3>
           <p class="blog-excerpt">Designing a Minesweeper engine from scratch forced me to think about ownership, modularity, and the difference between code that works and code that's actually maintainable...</p>
-          <a href="#" class="blog-more">Read More &rarr;</a>
-        </article>
-
-        <article class="blog-card glass-card">
-          <div class="blog-meta">
-            <span class="blog-date">Jan 5, 2026</span>
-            <span class="blog-tag-pill">Reflection</span>
-          </div>
-          <h3 class="blog-title">First Semester CE at UF: What I Wish I Knew</h3>
-          <p class="blog-excerpt">Digital Logic, Programming Fundamentals, and a rocket team all in semester one. Here's the honest breakdown of what worked, what didn't, and what surprised me most...</p>
           <a href="#" class="blog-more">Read More &rarr;</a>
         </article>
 
@@ -446,6 +438,19 @@
       </div>
     </div>
   </footer>
+
+  <!-- ── Blog Modal ── -->
+  <div class="blog-modal-overlay" id="blogModalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="blog-modal" id="blogModal">
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      <div class="modal-meta">
+        <span class="modal-date" id="modalDate"></span>
+        <span class="blog-tag-pill" id="modalTag"></span>
+      </div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

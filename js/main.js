@@ -238,7 +238,53 @@
 })();
 
 
-/* ── 7. Smooth-scroll for in-page links ── */
+/* ── 7. Blog Modal ── */
+(function initBlogModal() {
+  const overlay  = document.getElementById('blogModalOverlay');
+  const modal    = document.getElementById('blogModal');
+  const closeBtn = document.getElementById('modalClose');
+  if (!overlay || !modal) return;
+
+  function openModal(card) {
+    document.getElementById('modalDate').textContent  = card.dataset.date  || '';
+    document.getElementById('modalTag').textContent   = card.dataset.tag   || '';
+    document.getElementById('modalTitle').textContent = card.dataset.title || '';
+
+    // Convert \n\n to paragraphs
+    const paragraphs = (card.dataset.full || '').split('\n\n').filter(Boolean);
+    document.getElementById('modalBody').innerHTML =
+      paragraphs.map(p => `<p>${p}</p>`).join('');
+
+    overlay.classList.add('open');
+    modal.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Open on "Read More" click
+  document.querySelectorAll('.blog-card .blog-more').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const card = link.closest('.blog-card');
+      if (card && card.dataset.full) openModal(card);
+    });
+  });
+
+  // Close on button, backdrop click, or Escape
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+})();
+
+
+/* ── 8. Smooth-scroll for in-page links ── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const target = document.querySelector(a.getAttribute('href'));
